@@ -122,6 +122,22 @@ button:active {
 .success {
   color: #8bffcd;
 }
+
+.new-year-greeting {
+  animation: fadeInScale 1s ease-out;
+  text-align: center;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 </style>
 </head>
 
@@ -154,6 +170,18 @@ button:active {
 
 <script>
 const bankSelect = document.getElementById("bankName");
+const resultDiv = document.getElementById("result");
+
+const congratMessages = [
+  "Chúc mừng năm mới 2026! Chúc bạn nhận được thật nhiều lộc và may mắn.",
+  "Năm mới phát tài, phát lộc, vạn sự như ý!",
+  "Chúc bạn và gia đình an khang, thịnh vượng, sức khỏe dồi dào.",
+  "Tiền vô như nước, hạnh phúc tràn ngập, nụ cười luôn nở trên môi.",
+  "Tân niên tân phúc, tân tài, tân lộc!",
+  "Chúc bạn ngày càng thành công, sự nghiệp thăng tiến, cuộc sống viên mãn.",
+  "Xuân sang đắc lộc, cả năm đại thắng, mọi việc hanh thông.",
+  "Lì xì may mắn, nhận lộc đầu năm, cả năm sung túc."
+];
 
 async function loadBanks() {
   try {
@@ -174,6 +202,14 @@ async function loadBanks() {
 }
 
 loadBanks();
+
+// Step 1: Show Happy New Year animation when user first opens the page
+resultDiv.innerHTML = `
+  <div class="new-year-greeting">
+    <p class="success">✨ Chúc mừng năm mới 2026! ✨</p>
+    <p>Chúc bạn một năm mới an khang, thịnh vượng, vạn sự như ý.</p>
+  </div>
+`;
 
 function validateInput(account, bank, owner) {
   const accountRegex = /^[0-9]{8,20}$/;
@@ -199,7 +235,6 @@ function receiveLuckyMoney() {
   const account = document.getElementById("accountNumber").value.trim();
   const bank = bankSelect.value;
   const owner = document.getElementById("ownerName").value.trim();
-  const resultDiv = document.getElementById("result");
 
   const uniqueKey = account + "_" + bank + "_" + owner;
 
@@ -219,10 +254,16 @@ function receiveLuckyMoney() {
 
   localStorage.setItem("received_" + uniqueKey, true);
 
+  // Step 2: After clicking button, show money received and ONE random congratulation message
+  const randomIndex = Math.floor(Math.random() * congratMessages.length);
+  const selectedMessage = congratMessages[randomIndex];
+
   resultDiv.innerHTML = `
-    <p class="success">🎉 Lucky Money Received Successfully!</p>
-    <p>💰 Amount: <b>${money.toLocaleString()} VND</b></p>
-    <p>⏳ Transfer will be processed within 2 hours.</p>
+    <div class="new-year-greeting">
+      <p class="success">🎉 Nhận lì xì thành công!</p>
+      <p>💰 Số tiền: <b>${money.toLocaleString()} VND</b></p>
+      <p>${selectedMessage}</p>
+    </div>
   `;
 }
 </script>
