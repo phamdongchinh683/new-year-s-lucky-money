@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Lucky Money 2026</title>
+<title>Lì Xì 2026</title>
 
 <style>
 body {
@@ -144,26 +144,26 @@ button:active {
 <body>
 
 <div class="container">
-  <h2>🧧 Lucky Money 2026 🧧</h2>
+  <h2>🧧 Lì Xì 2026 🧧</h2>
 
   <div class="field-group">
-    <label for="accountNumber">Account number</label>
-    <input type="text" id="accountNumber" placeholder="Enter account number" />
+    <label for="accountNumber">Số tài khoản</label>
+    <input type="text" id="accountNumber" placeholder="Nhập số tài khoản" />
   </div>
 
   <div class="field-group">
-    <label for="bankName">Bank</label>
+    <label for="bankName">Ngân hàng</label>
     <select id="bankName">
-      <option>Loading banks...</option>
+      <option>Đang tải ngân hàng...</option>
     </select>
   </div>
 
   <div class="field-group">
-    <label for="ownerName">Account holder name</label>
-    <input type="text" id="ownerName" placeholder="Enter account holder name" />
+    <label for="ownerName">Tên chủ tài khoản</label>
+    <input type="text" id="ownerName" placeholder="Nhập tên chủ tài khoản" />
   </div>
 
-  <button onclick="receiveLuckyMoney()">Receive Lucky Money</button>
+  <button onclick="receiveLuckyMoney()">Nhận Lì Xì</button>
 
   <div class="result" id="result"></div>
 </div>
@@ -188,7 +188,7 @@ async function loadBanks() {
     const res = await fetch("https://api.vietqr.io/v2/banks");
     const data = await res.json();
 
-    bankSelect.innerHTML = "<option value=''>Select Bank</option>";
+    bankSelect.innerHTML = "<option value=''>Chọn ngân hàng</option>";
 
     data.data.forEach(bank => {
       const option = document.createElement("option");
@@ -197,7 +197,7 @@ async function loadBanks() {
       bankSelect.appendChild(option);
     });
   } catch (err) {
-    bankSelect.innerHTML = "<option>Error loading banks</option>";
+    bankSelect.innerHTML = "<option>Lỗi khi tải ngân hàng</option>";
   }
 }
 
@@ -213,16 +213,16 @@ resultDiv.innerHTML = `
 
 function validateInput(account, bank, owner) {
   const accountRegex = /^[0-9]{8,20}$/;
-  const nameRegex = /^[a-zA-Z\s]{3,50}$/;
+  const nameRegex = /^[a-zA-ZÀ-ỹ\s]{3,50}$/;
 
   if (!accountRegex.test(account)) {
-    return "Account number must be 8–20 digits only.";
+    return "Số tài khoản phải có từ 8–20 chữ số.";
   }
   if (!bank) {
-    return "Please select a bank.";
+    return "Vui lòng chọn ngân hàng.";
   }
   if (!nameRegex.test(owner)) {
-    return "Account holder name must be 3–50 letters only.";
+    return "Tên chủ tài khoản phải có từ 3–50 ký tự chữ.";
   }
   return null;
 }
@@ -240,7 +240,7 @@ function receiveLuckyMoney() {
 
   if (localStorage.getItem("received_" + uniqueKey)) {
     resultDiv.innerHTML =
-      "<p class='error'>You have already received lucky money. Only one time allowed.</p>";
+      "<p class='error'>Bạn đã nhận lì xì rồi. Chỉ được nhận một lần.</p>";
     return;
   }
 
