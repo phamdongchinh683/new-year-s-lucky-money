@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lucky Money 2026</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #ffb347 0, #c8102e 40%, #5a0000 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fff9e6;
+}
+
+.container {
+  background: rgba(0, 0, 0, 0.45);
+  padding: 28px 26px 26px;
+  border-radius: 18px;
+  width: 380px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 215, 0, 0.35);
+}
+
+.container h2 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 22px;
+  letter-spacing: 0.03em;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.field-group label {
+  font-size: 13px;
+  text-align: left;
+  color: #ffe9b3;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px 11px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.24);
+  color: #fff9e6;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, transform 0.06s ease;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #ffd700 50%),
+    linear-gradient(135deg, #ffd700 50%, transparent 50%);
+  background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+input:focus,
+select:focus {
+  border-color: #ffd700;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.4);
+  background: rgba(0, 0, 0, 0.35);
+  transform: translateY(-1px);
+}
+
+button {
+  width: 100%;
+  padding: 11px;
+  margin-top: 6px;
+  background: linear-gradient(135deg, #ffd700, #ffb347);
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  color: #5a2300;
+  box-shadow: 0 9px 20px rgba(0, 0, 0, 0.55);
+  transition: transform 0.06s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.6);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+}
+
+.result {
+  margin-top: 18px;
+  font-size: 15px;
+  text-align: left;
+}
+
+.error {
+  color: #ffb3b3;
+}
+
+.success {
+  color: #8bffcd;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>🧧 Lucky Money 2026 🧧</h2>
+
+  <div class="field-group">
+    <label for="accountNumber">Account number</label>
+    <input type="text" id="accountNumber" placeholder="Enter account number" />
+  </div>
+
+  <div class="field-group">
+    <label for="bankName">Bank</label>
+    <select id="bankName">
+      <option>Loading banks...</option>
+    </select>
+  </div>
+
+  <div class="field-group">
+    <label for="ownerName">Account holder name</label>
+    <input type="text" id="ownerName" placeholder="Enter account holder name" />
+  </div>
+
+  <button onclick="receiveLuckyMoney()">Receive Lucky Money</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+const bankSelect = document.getElementById("bankName");
+
+async function loadBanks() {
+  try {
+    const res = await fetch("https://api.vietqr.io/v2/banks");
+    const data = await res.json();
+
+    bankSelect.innerHTML = "<option value=''>Select Bank</option>";
+
+    data.data.forEach(bank => {
+      const option = document.createElement("option");
+      option.value = bank.shortName;
+      option.textContent = bank.shortName + " - " + bank.name;
+      bankSelect.appendChild(option);
+    });
+  } catch (err) {
+    bankSelect.innerHTML = "<option>Error loading banks</option>";
+  }
+}
+
+loadBanks();
+
+function validateInput(account, bank, owner) {
+  const accountRegex = /^[0-9]{8,20}$/;
+  const nameRegex = /^[a-zA-Z\s]{3,50}$/;
+
+  if (!accountRegex.test(account)) {
+    return "Account number must be 8–20 digits only.";
+  }
+  if (!bank) {
+    return "Please select a bank.";
+  }
+  if (!nameRegex.test(owner)) {
+    return "Account holder name must be 3–50 letters only.";
+  }
+  return null;
+}
+
+function randomMoney() {
+  return Math.floor(Math.random() * 490 + 10) * 1000;
+}
+
+function receiveLuckyMoney() {
+  const account = document.getElementById("accountNumber").value.trim();
+  const bank = bankSelect.value;
+  const owner = document.getElementById("ownerName").value.trim();
+  const resultDiv = document.getElementById("result");
+
+  const uniqueKey = account + "_" + bank + "_" + owner;
+
+  if (localStorage.getItem("received_" + uniqueKey)) {
+    resultDiv.innerHTML =
+      "<p class='error'>You have already received lucky money. Only one time allowed.</p>";
+    return;
+  }
+
+  const error = validateInput(account, bank, owner);
+  if (error) {
+    resultDiv.innerHTML = "<p class='error'>" + error + "</p>";
+    return;
+  }
+
+  const money = randomMoney();
+
+  localStorage.setItem("received_" + uniqueKey, true);
+
+  resultDiv.innerHTML = `
+    <p class="success">🎉 Lucky Money Received Successfully!</p>
+    <p>💰 Amount: <b>${money.toLocaleString()} VND</b></p>
+    <p>⏳ Transfer will be processed within 2 hours.</p>
+  `;
+}
+</script>
+
+</body>
+</html>
